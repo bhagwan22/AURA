@@ -1,0 +1,168 @@
+//COMPONENT
+
+<aura:component implements="force:appHostable,flexipage:availableForRecordHome,force:hasRecordId" access="global" controller="Custom_PheoTypeInfo_cmp_Controller">
+    <!--aura:attribute name="pheoTypeRecord" type="Object"/-->
+    <aura:attribute name="recordLoadError" type="String"/>
+    <aura:attribute name="PheoTypeRecord" type="Pheotype_info__c" 
+               default="{ 'sobjectType': 'Pheotype_info__c' }"/>
+    
+    <aura:attribute name="activeSections" type="List" default="['A','C']" />
+    <aura:attribute name="activeSectionsMessage" type="String" default="" />
+    
+     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!v.recordId}"
+                      fields="Clinical__c,Nutrition__c,Physical_Feature__c,Sleep__c,Subscription__c,Sleep_Check__c, BMI__c,Subscription_expiration_date__c, Bitter_Taste__c, Childhood_ear_infections__c, Cold_sensitivity__c, CreatedById, CreatedDate, Eye_color__c, Folate__c, Freckling__c, Hair_color__c, Hair_curliness__c, Hair_thickness__c, Handedness__c, Height__c, Hypermobility__c, Id, Iris_pattern__c, IsDeleted, LastActivityDate, LastModifiedById, LastModifiedDate, LastReferencedDate, LastViewedDate, Motion_sickness__c, Name, Nose_size__c, Patient__c, Red_hair__c, Skin_pigmentation__c, Sleep_disruption__c, Sleep_duration__c, Sleep_latency__c, SystemModstamp, Vitamin_A__c, Vitamin_B12__c, Vitamin_B6__c, Vitamin_C__c, Vitamin_D__c, Vitamin_E__c, wakeup_time__c"
+                      />   
+    
+    <!--p>{! v.activeSectionsMessage }</p-->
+    
+    <lightning:recordViewForm recordId="{!v.recordId}" objectApiName="Pheotype_info__c">
+        <lightning:outputField class="slds-form-element_readonly slds-var-m-around_medium" fieldName="Name"/>
+        <lightning:outputField class="slds-form-element_readonly slds-var-m-around_medium" fieldName="Patient__c"/>
+       
+            <lightning:accordion class="slds-var-m-around_medium"
+                                 allowMultipleSectionsOpen="true"
+                                 onsectiontoggle="{! c.handleSectionToggle }"
+                                 activeSectionName="{! v.activeSections }"
+                                 >
+                <lightning:accordionSection name="Physical Features" label="Physical Features">
+                    <aura:set attribute="actions">
+                    </aura:set>
+                    <aura:set attribute="body">
+                        <aura:if isTrue="{!v.PheoTypeRecord.Physical_Feature__c}">
+                            <div>
+                                <lightning:outputField class="slds-form-element_readonly" fieldName="Cold_sensitivity__c"/>
+                                <lightning:outputField class="slds-form-element_readonly" fieldName="Childhood_ear_infections__c"/>
+                                <lightning:outputField class="slds-form-element_readonly" fieldName="Eye_color__c"/>
+                                <lightning:outputField class="slds-form-element_readonly" fieldName="Freckling__c"/>
+                                <lightning:outputField class="slds-form-element_readonly" fieldName="Folate__c"/>
+                                <lightning:outputField class="slds-form-element_readonly" fieldName="Height__c"/>
+                                <lightning:outputField class="slds-form-element_readonly" fieldName="Hair_color__c"/>
+                                <lightning:outputField class="slds-form-element_readonly" fieldName="Hair_curliness__c"/>
+                                <lightning:outputField class="slds-form-element_readonly" fieldName="Hair_thickness__c"/>
+                                <lightning:outputField class="slds-form-element_readonly" fieldName="Hypermobility__c"/>
+                                <lightning:outputField class="slds-form-element_readonly" fieldName="Iris_pattern__c"/>
+                                <lightning:outputField class="slds-form-element_readonly" fieldName="Motion_sickness__c"/>
+                                <lightning:outputField class="slds-form-element_readonly" fieldName="Handedness__c"/>
+                                <lightning:outputField class="slds-form-element_readonly" fieldName="Nose_size__c"/>
+                                <lightning:outputField class="slds-form-element_readonly" fieldName="Red_hair__c"/>
+                                <lightning:outputField class="slds-form-element_readonly" fieldName="Skin_pigmentation__c"/>
+                            </div>
+                            <aura:set attribute="else">
+                                <div class="slds-box errorCss">This Test is Not Purchased. Please Purchase to see the result</div>
+                            </aura:set>
+                        </aura:if> 
+                    </aura:set>
+                </lightning:accordionSection>
+                <lightning:accordionSection name="Sleep" label="Sleep">
+                    <aura:if isTrue="{!v.PheoTypeRecord.Sleep__c}">
+                        <div>
+                            <lightning:outputField class="slds-form-element_readonly" fieldName="Sleep_disruption__c"/>
+                            <lightning:outputField class="slds-form-element_readonly" fieldName="Sleep_duration__c"/>
+                            <lightning:outputField class="slds-form-element_readonly" fieldName="Sleep_latency__c"/>
+                            <lightning:outputField class="slds-form-element_readonly" fieldName="wakeup_time__c"/>
+                        </div>
+                        <aura:set attribute="else">
+                            <div class="slds-box errorCss">This Test is Not Purchased. Please Purchase to see the result</div>
+                        </aura:set>
+                    </aura:if> 
+                </lightning:accordionSection>
+                <lightning:accordionSection name="Nutrition" label="Nutrition">
+                    <aura:if isTrue="{!v.PheoTypeRecord.Nutrition__c}">
+                        <div>
+                            <lightning:outputField class="slds-form-element_readonly" fieldName="Vitamin_A__c"/>
+                            <lightning:outputField class="slds-form-element_readonly" fieldName="Vitamin_B6__c"/>
+                            <lightning:outputField class="slds-form-element_readonly" fieldName="Vitamin_B12__c"/>
+                            <lightning:outputField class="slds-form-element_readonly" fieldName="Vitamin_C__c	"/>
+                            <lightning:outputField class="slds-form-element_readonly" fieldName="Vitamin_D__c"/>
+                            <lightning:outputField class="slds-form-element_readonly" fieldName="Vitamin_E__c"/>
+                            <lightning:outputField class="slds-form-element_readonly" fieldName="BMI__c"/>
+                            <lightning:outputField class="slds-form-element_readonly" fieldName="Bitter_Taste__c"/>
+                        </div>
+                        <aura:set attribute="else">
+                            <div class="slds-box errorCss">This Test is Not Purchased. Please Purchase to see the result</div>
+                        </aura:set>
+                    </aura:if> 
+                </lightning:accordionSection>
+                <lightning:accordionSection name="Clinical" label="Clinical">
+                    <aura:if isTrue="{!v.PheoTypeRecord.Clinical__c}">
+                        <div ><lightning:outputField class="slds-form-element_readonly" fieldName="Clinical__c"/></div>
+                        <aura:set attribute="else">
+                            <div class="slds-box errorCss">This Test is Not Purchased. Please Purchase to see the result</div>
+                        </aura:set>
+                    </aura:if> 
+                </lightning:accordionSection>
+                <lightning:accordionSection name="Subscription" label="Subscription">
+                    <aura:if isTrue="{!v.PheoTypeRecord.Subscription__c}">
+                        <div ><lightning:outputField class="slds-form-element_readonly" fieldName="Subscription_Check__c"/>
+                            <lightning:outputField class="slds-form-element_readonly" fieldName="Subscription_expiration_date_formula__c"/>
+                        </div>
+                        <aura:set attribute="else">
+                            <div class="slds-box errorCss">This Test is Not Purchased. Please Purchase to see the result</div>
+                        </aura:set>
+                    </aura:if> 
+                </lightning:accordionSection>
+            </lightning:accordion>
+                <div class="slds-grid slds-wrap">
+                  <div class="slds-col slds-size_1-of-2"><lightning:outputField label="CreatedBy" class="slds-form-element_readonly" fieldName="CreatedById"/></div>
+                  <div class="slds-col slds-size_1-of-2"><lightning:outputField class="slds-form-element_readonly" fieldName="LastModifiedById"/></div>
+                    <div class="slds-col slds-size_1-of-2"><lightning:outputField class="slds-form-element_readonly" fieldName="CreatedDate"/></div>
+                    <div class="slds-col slds-size_1-of-2"><lightning:outputField class="slds-form-element_readonly" fieldName="LastModifiedDate"/></div>
+                </div>
+			
+            
+    </lightning:recordViewForm>
+</aura:component>
+
+// JS CONTROLER
+({
+    doInit : function(component, event, helper) {
+        var action = component.get("c.getBoughtTestCheck");
+        action.setParams({ recordId : component.get("v.recordId") });
+        action.setCallback(this, function(response) {
+            var state = response.getState();
+            if (state === "SUCCESS") {
+                component.set("v.PheoTypeRecord", response.getReturnValue());
+                console.log('SUCCESS');
+                console.log(response.getReturnValue());
+            }
+            else
+                console.log('ERROR == ');
+         });
+         $A.enqueueAction(action); 
+    },
+    
+    handleSectionToggle: function (cmp, event) {
+        var openSections = event.getParam('openSections');
+
+        if (openSections.length === 0) {
+            cmp.set('v.activeSectionsMessage', "All sections are closed");
+        } else {
+            cmp.set('v.activeSectionsMessage', "Open sections: " + openSections.join(', '));
+        }
+    }
+});
+
+// APEX CONTROLLER
+/*************************************************************************************************************************************************
+ * @ Description  :  Controller for Custom_PheoTypeInfo Lightning component
+ * @ Method      :  getBoughtTestCheck
+ *************************************************************************************************************************************************/ 
+
+public class Custom_PheoTypeInfo_cmp_Controller {
+  @AuraEnabled
+    public static Pheotype_info__c getBoughtTestCheck(string recordId){
+        return [Select id,Clinical__c,Nutrition__c,Physical_Feature__c,Sleep__c,Subscription__c,Subscription_expiration_date_formula__c,CreatedDate, LastModifiedDate from Pheotype_info__c where id=:recordId Limit 1];
+    }
+}
+
+
+//CSS
+
+.THIS .errorCss{
+    font-family: 'customSalesforceFont';
+    font-size: 1.2rem;
+    color:red;
+}
+
