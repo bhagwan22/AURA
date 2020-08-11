@@ -3,10 +3,10 @@
 -->
 
 <!-- IN CHILD COMPONENT "MYCHILD" -->
-<aura:message name="toChildcall" action="{!c.someChildJsFunction}">
+<aura:method name="toChildcall" action="{!c.someChildJsFunction}">
 	<aura:attribute name="XYZ" type="String"/>  // NAME IS IMPORTANT TO ACCESS VALUE 
 	<aura:attribute name="ABC" type="Integer"/> 
-<aura:message/>
+<aura:method/>
 
 
 // CHILD JS CONTROLLER
