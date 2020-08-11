@@ -1,0 +1,38 @@
+<!--
+1. THIS IS USE WITHOUT REGISTERING EVENT, HERE CHILD COMPONENT METHOD IS CALLD FORM PARENT JS CONTROLLER
+-->
+
+<!-- IN CHILD COMPONENT "MYCHILD" -->
+<aura:message name="toChildcall" action="{!c.someChildJsFunction}">
+	<aura:attribute name="XYZ" type="String"/>  // NAME IS IMPORTANT TO ACCESS VALUE 
+	<aura:attribute name="ABC" type="Integer"/> 
+<aura:message/>
+
+
+// CHILD JS CONTROLLER
+----------------------
+someChildJsFunction : function(comp, event){
+	var allParameters = event.getParam('arguments');
+	
+	//NOW TO GET ARGUMENTS VALUES
+	var param1 = allParameters.XYZ;
+	var param1 = allParameters.ABC;
+	
+	return 'ANY VALUE';
+}
+
+
+
+<!-- PARENT COMPONENT -->
+
+<c:MYCHILD aura:id="childId"/>
+<lightning:button label="callChild" onclick="{!c.parentJsMethod}"/>
+
+PARENT JS CONTROLLER
+--------------------
+parentJsMethod : function(comp,event,helper){
+	var childRef = comp.find("childId");
+	var returnVal = childRef.someChildJsFunction('BHAGWAN SINGH',1);
+	
+}
+
