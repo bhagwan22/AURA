@@ -1,0 +1,57 @@
+
+						@@@@ COMPONENT ATTRIBUTES  & Local/global id @@@@
+															
+	(#)  aura:id=" "  :-   doesn't support expressions. You can only assign literal string values & it specify "LOCALID" aura:id of the component.
+							USE CASE:
+										cmp.find("LocalId")  --------> Return instance of the component in client side controller
+										cmp.getLocalId("LocalId") ----> Return instance of the component in JavaScript
+										
+										
+		NOTE:	
+		Every component have a localId and a GlobalId associated. remember multiple instances of a component can have similar localId but will always have a unique GlobalId
+					because it is generated at runtime.
+					We can get it by --------  cmp.getGlobalId();
+					
+					
+	
+	(#)  	<lightning:input type="number" aura:id="expenseform" label="Amount"
+                             name="expenseamount"
+                             min="0.1"
+                             formatter="currency"
+                             step="0.01"
+                             value="{!v.newExpense.Amount__c}"
+                             messageWhenRangeUnderflow="Enter an amount that's at least $0.10."/> 
+							 
+			NOTE:	some other attribute are required, placeholder, type, min, and step	
+			
+	
+
+										
+	(#)  
+		// OBJECT TYPE ATTRIBUTE WITH DEFAULT VALUE
+		<aura:attribute name="newExpense" type="Expense__c"
+         default="{ 'sobjectType': 'Expense__c',
+                        'Name': '',
+                        'Amount__c': 0,
+                        'Client__c': '',
+                        'Date__c': '',
+                        'Reimbursed__c': false }"/>
+	
+	
+	(#) IF WE ARE CREATING AN CHECKBOX THEN---- we make use of it's CHECKED rather then value
+		EX1:
+			 <lightning:input type="checkbox" aura:id="campingform" label="Packed"
+                                     name="expreimbursed"
+                                     checked="{!v.newItem.Packed__c}"/>
+									 
+									 
+	
+	/**/
+* How to fill attribute type sObect from javascript controller
+*
+/**/
+
+			var newCampingItem = component.get("v.newItem");
+            component.set("v.newItem",{ 'sobjectType': 'Camping_Item__c','Name': '','Quantity__c': 0,
+                                       'Price__c': 0,'Packed__c': false });
+	

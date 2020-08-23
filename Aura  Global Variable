@@ -1,0 +1,38 @@
+
+
+							@@@@ AURA GLOBAL VARIABLE  @@@@
+															
+															
+	(#) $Browser  :  returns information about the hardware and operating system of the browser accessing the application.
+						$Browser.formFactor  ---  Return DESKTOP, PHONE, TABLET
+						$Browser.isAndroid  ---  Return true if browser is running on an android device.
+						$Browser.isTos, IsIPad ... etc
+						
+	(#)	$ContentAsset  : The $ContentAsset global value provider lets you reference images, style sheets, and JavaScript used as asset files in your Lightning components.
+			EX:
+				<img src="{!$ContentAsset.websiteImages + 'pathinarchive=images/logo.jpg'}" "alt="holiday wreath"/>
+	
+	
+	(#) $Resource  : The $Resource global value provider lets you reference images, style sheets, and JavaScript code you’ve uploaded in static resources.						
+								EX:
+								in javascript  : var profUrl = $A.get('$Resource.SLDSv2') + '/assets/images/avatar1.jpg'; 
+							    IN COMPONENT   : <img src="{!$Resource.generic_profile_svg}"/>
+	
+	
+	(#) $Label    :---	To Access label from salesforce org
+						EX: 
+							{!$Label.c.labelName}
+							{!$Label.namespace.labelName}  // if org has a namespace, or to access a label in a managed package
+						
+							$A.get("$Label.namespace.labelName") //in JS controller 
+						
+	
+	(#) $Locale   :----  The $Locale global value provider returns information about the current user’s preferred locale.
+							EX:
+								{!$Locale.language}
+								{!$Locale.timezone}
+								
+								in JS  =====>   $A.get("$Locale.language");
+								
+								
+						
