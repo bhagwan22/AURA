@@ -5,7 +5,12 @@
 			@@@@ COMMUNICATION BETWEEN TWO SEPTATE COMPONENT @@@@
 				---------------------------------------------
 
- (##)   difference between attributes and events = difference between wired circuits and wireless circuits.
+CAN BE UNDERSTOOD SIMILAR TO ATTRIBUTE : we use this steps
+1. DEFINE(name, type, attributes take)
+2. FIRE
+3. REGISTER(name, type, handlerMethod)
+
+difference between attributes and events = difference between wired circuits and wireless circuits.
 
  
  (##) There are two principal ways to interact with another component. 
