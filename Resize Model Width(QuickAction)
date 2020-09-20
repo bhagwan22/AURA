@@ -1,0 +1,6 @@
+ <aura:html tag="style">
+        .slds-modal__container{ 
+        width: 80%; max-width: 70%; 
+        } 
+        
+    </aura:html>
