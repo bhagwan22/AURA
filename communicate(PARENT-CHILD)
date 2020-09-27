@@ -1,5 +1,6 @@
 <!--
 1. THIS IS USE WITHOUT REGISTERING EVENT, HERE CHILD COMPONENT METHOD IS CALLD FORM PARENT JS CONTROLLER
+AURA:METHOD
 -->
 
 <!-- IN CHILD COMPONENT "MYCHILD" -->
@@ -32,7 +33,7 @@ PARENT JS CONTROLLER
 --------------------
 parentJsMethod : function(comp,event,helper){
 	var childRef = comp.find("childId");
-	var returnVal = childRef.someChildJsFunction('BHAGWAN SINGH',1);
+	var returnVal = childRef.toChildcall('BHAGWAN SINGH',1);
 	
 }
 
