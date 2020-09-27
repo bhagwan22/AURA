@@ -1,0 +1,67 @@
+<aura:component >
+    <aura:attribute name="parentValue" type="Integer"/>
+    <aura:attribute name="isLike" type="boolean" default='false'/>
+    <aura:registerEvent name="likeAction" type="c.userAction"/>
+    <aura:registerEvent name="disLikeAction" type="c.userAction"/>
+    
+	<lightning:card title="{!('child'+v.parentValue)}">
+    	<meter value="{!v.parentValue/10}"/>
+        <h1 class="slds-text-align_center">child id loading...</h1>
+        <aura:set attribute="actions">
+            <lightning:buttonIcon aura:id="likeId" iconName="utility:like" alternativeText="Like" onclick="{!c.notify_Like}"/>
+            <lightning:buttonIcon aura:id="dislikeId" iconName="utility:dislike" alternativeText="Like" onclick="{!c.notify_disLike}"/>
+        </aura:set>
+	</lightning:card>
+</aura:component>
+
+
+//*********************************************************************************************************************************
+                                                            <!--JS CONTROLLER -->
+
+({
+    notify_Like : function(component, event, helper) {
+        var likeref = component.find("likeId");
+        var dislikeref = component.find("dislikeId");
+        var dislik = 0;
+        var lik = 0;
+        //CHECK FOR LIKE OR UNLIKE OR NEUTRAL
+        if($A.util.hasClass(dislikeref,"slds-button_icon-brand")){
+            dislik =-1;
+            $A.util.removeClass(dislikeref,'slds-button_icon-brand');   
+        }
+        if($A.util.hasClass(likeref,"slds-button_icon-brand")){
+         	$A.util.removeClass(likeref,'slds-button_icon-brand');   
+            lik =-1
+        } 
+        else{
+         	$A.util.addClass(likeref,"slds-button_icon-brand");
+        	lik=1;
+        }   
+        
+        //FIRE EVENT
+        alert('Like : '+lik+'\nDislike : '+dislik);
+        
+    },
+    notify_disLike : function(component, event, helper) {
+        var likeref = component.find("likeId");
+        var dislikeref = component.find("dislikeId");
+        var dislik = 0;
+        var lik = 0;
+        
+        if($A.util.hasClass(likeref,'slds-button_icon-brand')){
+            lik=-1;
+            $A.util.removeClass(likeref,"slds-button_icon-brand");
+        }
+        if($A.util.hasClass(dislikeref,'slds-button_icon-brand')){
+            dislik = -1;
+            $A.util.removeClass(dislikeref,'slds-button_icon-brand');
+        }
+        else{
+            $A.util.addClass(dislikeref,'slds-button_icon-brand');
+            dislik = 1;
+        }
+        
+        //FIRE EVENT
+        alert('Like : '+lik+'\nDislike : '+dislik);
+    }
+})
