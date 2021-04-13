@@ -1,0 +1,54 @@
+### COMPONENT
+    ---------
+    
+  <aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute type="String" name="recordId"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <lightning:card footer="Card Footer" title="Hello Clone">
+        <aura:set attribute="actions">
+            <lightning:button label="New"/>
+        </aura:set>
+        <p class="slds-p-horizontal_small">
+            Card Body (custom component)
+        </p>
+    </lightning:card>
+</aura:component>
+
+
+### COMPONENT.js
+    ---------
+    
+({
+	doInit : function(comp, event, helper) {
+		console.log("INIT called . . .");
+        console.log(comp.get("v.recordId"));
+	}
+})
+
+
+
+
+### ltng:outApp APPLICATION
+    ------------------------
+<aura:application access="GLOBAL" extends="ltng:outApp" >
+    <aura:dependency resource="c:ContactCloner"/>
+</aura:application>
+
+
+### VF PAGE
+------------
+
+<apex:page standardController="Contact" standardStylesheets="false" sidebar="false" recordSetVar="cps">
+    <apex:includeLightning />
+    <script src="https://https://bhagwansfsite-dev-ed.my.salesforce.com/lightning/lightning.out.js"></script>
+    <div id="lightningCmpDisplayId"/>
+    
+    <script>
+    	$Lightning.use("c:ContactClonerCall",function(){
+        	$Lightning.createComponent("c:ContactCloner",{recordId:'{!$CurrentPage.parameters.id}'},"lightningCmpDisplayId",function(cmp){
+            	console.log('THIS IS CALL BACK');
+            });
+        });
+    </script>
+</apex:page>
