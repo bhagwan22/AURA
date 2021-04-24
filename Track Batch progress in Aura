@@ -1,1 +1,101 @@
 https://www.forcetree.com/2019/11/execute-batch-apex-from-lightning.html
+
+
+
+
+##### COMPONENT ##########
+
+<aura:if  isTrue="{!v.Datashow}"> 
+		<c:Cloned_Counterparties projectId="{!v.newProjectId}" oldProject_Name="{!v.oldProjectName}" />
+</aura:if>
+
+
+<lightning:button type="submit" name="Clone" label="Clone" class="slds-button slds-button_brand slds-m-top_medium"/>
+ 
+ 
+##### COMPONENT JS ##########
+
+handleSubmit: function(component, event, helper) {
+
+		var action = component.get("c.executeBatchJob");
+        action.setParams({
+            "nwProjectId": newProject,
+            "odProjectId": component.get("v.oldProjectId")
+        });
+        action.setCallback(this, function(response) {
+            var state = response.getState();
+            if (state === "SUCCESS") {                	
+                	console.log('@@@@@@ 1 COMP : Executing Batch STARTED ');
+                    var interval = setInterval($A.getCallback(function () {
+                        var jobStatus = component.get("c.getBatchJobStatus");
+                        if(jobStatus != null){
+                            console.log('####### 1 COMP : INterval run ');
+                            jobStatus.setParams({ jobID : response.getReturnValue()});
+                            jobStatus.setCallback(this, function(jobStatusResponse){
+                                var state = jobStatus.getState();
+                                if (state === "SUCCESS"){
+                                    console.log('##@@@@ 1 COMP : INterval per SUCCESS** state '); 
+                                    var job = jobStatusResponse.getReturnValue();
+                                    component.set('v.apexJob',job);
+                                     console.log(job);
+                                    var processedPercent = 0;
+                                    var progress = component.get('v.progress');
+                                    if(job.Status == 'Completed'){
+                                        console.log('####### 1 COMP : INterval COMPLETED ');
+                                        component.set('v.progress',clearInterval(interval));
+                                        component.set('v.displaySpinner',false);
+                                        component.set('v.isOpen',false);
+                                        component.set('v.apexJob',job);       
+                                        component.set("v.Datashow", true);
+                                    }
+                                    else if(job.JobItemsProcessed !=job.TotalJobItems){
+                                        console.log('####### 1 COMP : INterval INPROGRESS ');
+                                        processedPercent = (job.JobItemsProcessed / job.TotalJobItems) * 100;
+                                        component.set('v.progress',processedPercent);
+                                         console.log('##@@@@ 1 COMP : job.JobItemsProcessed '+job.JobItemsProcessed);
+                                         console.log('##@@@@ 1 COMP : job.TotalJobItems '+job.TotalJobItems);
+                                    }
+                                     else{
+                                          console.log('###@@@ LINE x ');  
+                                    }
+                                }
+                                else{
+                                    console.log('##@@@@ 1 COMP : INterval ERROR '+state);
+                                }
+                            });
+                            $A.enqueueAction(jobStatus);
+                        }
+                    }), 1000);
+            }
+            else if (state === "ERROR") {
+                alert('@@@@ Comp 1: Something went wrong with Cloning : '+message);
+                console.error(message);
+            }
+        });
+        $A.enqueueAction(action);
+
+    }
+
+
+
+####### APEX ########
+
+//EXECUTE BATCH
+    @AuraEnabled
+    public static Id executeBatchJob(String nwProjectId,String odProjectId){
+        Integer batchSize = Integer.valueOf(System.label.CloneBatchSize_SLX);
+        Id batchJobId = Database.executeBatch(new SLX_CounterParty_Clone_Batch(nwProjectId,odProjectId), batchSize);
+        return batchJobId;
+    }
+	
+	
+
+  //CHECK BATCH STATUS
+    @AuraEnabled
+    public static AsyncApexJob  getBatchJobStatus(String jobID){
+        AsyncApexJob jobInfo = [SELECT Status, NumberOfErrors,JobItemsProcessed,TotalJobItems FROM AsyncApexJob WHERE Id = :jobID];
+        return jobInfo;  
+    }
+	
+	
+	
