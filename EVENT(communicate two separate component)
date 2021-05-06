@@ -4,6 +4,11 @@
 				------------
 			@@@@ COMMUNICATION BETWEEN TWO SEPTATE COMPONENT @@@@
 				---------------------------------------------
+Register event on component that need to fire that event + give name to that registered instance of event for that component.
+
+Write Handler to component that want to handle event. The name & instance of register event and the handler should be similar.
+
+
 
 CAN BE UNDERSTOOD SIMILAR TO ATTRIBUTE : we use this steps
 1. DEFINE(name, type, attributes take)
