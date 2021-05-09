@@ -29,51 +29,76 @@ difference between attributes and events = difference between wired circuits and
 			(*)   Components don’t send events to another component dirictly.
 				 Components broadcast events of a particular type. If there’s a component that responds to that type of event, and if that component “hears” your event, then it will act on it.
 
-@@@@@@  STEPS:
+*******************************************************************************************************************************************************************************
+######## COMPONENT EVENT
 
-DEFINING AN EVENT:
-					event name = updateExpense
+STEPS:
+
+1. DEFINING AN EVENT:
+				event name = updateExpense and Type
 				EX 1:   
-						<aura:event type="COMPONENT">// There are two types of events Component and Application. 
-							<aura:attribute name="expense" type="Expense__c"/>
-						</aura:event>
+					<aura:event type="COMPONENT">// There are two types of events Component and Application. 
+						<aura:attribute name="expense" type="Expense__c"/>
+					</aura:event>
 
 
-```` STEP 2:  Register your component to send these events:
-							(#) Register your component to send this events and specify custom event type
-								NOTE:  custom event type specify which handlers can handel this event
-								
-							//Register right below its attribute definitions.
-								
-							EX1: name should be same as event name = updateExpense
-							<aura:registerEvent name="updateExpense" type="c:expensesItemUpdate"/> 
-`
-`
-`
-````STEP 3: 	USE AN EVENT in a Component controllwe AND FIRE IT:--
+2:  Register your component to send these events:
+
+	(#) Register your component to send this events and specify custom event type and Name(and then all the handler will refer to same name of described event type)
+	    Register right below its attribute definitions.
+
+		EX1: name should be same as event name = updateExpense
+		<aura:registerEvent name="updateExpense" type="c:expensesItemUpdate"/> 
+
+
+3: 	fire EVENT for registerd Component controller:--
 			
-				({
-					clickReimbursed: function(component, event, helper) {
-						var expense = component.get("v.expense");
-						var updateEvent = component.getEvent("updateExpense");
-						updateEvent.setParams({ "expense": expense });
-						updateEvent.fire();
-					}
-`
-`
-`
-```` STEP 4:    CREATING EVENT HANDLERS:
+		({
+		  clickReimbursed: function(component, event, helper) {
+			var expenseValue1 = component.get("v.expense");
+			var updateEvent = component.getEvent("updateExpense"); <-- GET THE INSTANCE OF EVENT
+			updateEvent.setParams({ "expense": expenseValue1 });
+			updateEvent.fire();
+		}
+
+
+4:    HANDLER EVENT:
 					
-				EX1:
-				<aura:handler name="updateExpense" event="c:expensesItemUpdate" action="{!c.handleUpdateExpense}"/> 
-																																				event = EVENT TYPE
-							
-				HANDLER:-
-						handleUpdateExpense: function(component, event, helper) {
-							var updatedExp = event.getParam("expense");//ATTRIBUTE
-							helper.updateExpense(component, updatedExp);
-						}
+		EX1:
+		<aura:handler name="updateExpense" event="c:expensesItemUpdate" action="{!c.handleUpdateExpense}"/> 
+																																		event = EVENT TYPE
 
+		Controller handler:-
+			handleUpdateExpense: function(component, event, helper) {
+				var updatedExp = event.getParam("expense");//ATTRIBUTE
+				helper.updateExpense(component, updatedExp);
+			}
 
+*****************************************************************************************************************************************************************************
 
 		
+### APPLICATION EVENT
+<!--c:aeEvent-->
+<aura:event type="APPLICATION">
+    <aura:attribute name="message" type="String"/>
+</aura:event>
+
+
+//Register event ####
+	<aura:registerEvent name="customAppEvent" type="c:aeEvent"/>
+	
+	//FIRE event
+		var appEvent = $A.get("e.c:aeEvent");
+        appEvent.setParams({
+            "message" : "An application event fired me. " +
+            "It all happened so fast. Now, I'm everywhere!" });
+        appEvent.fire();
+
+//Hanfler event ####
+<aura:handler event="c:aeEvent" action="{!c.handleApplicationEvent}"/>
+
+(*) NOTE: 
+	- for APPLICATION EVENT all what matters is event type(in this case which is aeEvent ) for not name.
+	- And to fire event first we get the Instance of event here we use e.c:eventType
+	
+	
